@@ -160,6 +160,28 @@ describe('computeSplit', () => {
       );
     });
 
+    it('refuses a fraction of a basis point', () => {
+      expectDomainError(
+        () =>
+          computeSplit(1000, 'PERCENTAGE', [
+            { userId: alice, value: 3333.5 },
+            { userId: bob, value: 6666.5 },
+          ]),
+        'INVALID_WEIGHT',
+      );
+    });
+
+    it('refuses a negative percentage', () => {
+      expectDomainError(
+        () =>
+          computeSplit(1000, 'PERCENTAGE', [
+            { userId: alice, value: 11000 },
+            { userId: bob, value: -1000 },
+          ]),
+        'INVALID_WEIGHT',
+      );
+    });
+
     it('refuses a participant with no percentage', () => {
       expectDomainError(
         () => computeSplit(1000, 'PERCENTAGE', [{ userId: alice, value: 10000 }, { userId: bob }]),

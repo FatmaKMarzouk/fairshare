@@ -129,8 +129,8 @@ describe('allocate', () => {
       for (let round = 0; round < 2000; round += 1) {
         const total = randomInt(next, 0, 5_000_00);
         const count = randomInt(next, 1, 8);
-        const weights = Array.from({ length: count }, () => randomInt(next, 0, 20));
-        if (weights.every((weight) => weight === 0)) {
+        const weights: number[] = Array.from({ length: count }, () => randomInt(next, 0, 20));
+        if (weights.reduce((a, b) => a + b, 0) === 0) {
           weights[0] = 1;
         }
 

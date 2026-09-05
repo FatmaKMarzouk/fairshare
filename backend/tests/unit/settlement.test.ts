@@ -175,6 +175,19 @@ describe('simplifyDebts', () => {
       ]);
     });
 
+    it('orders two identical payments by recipient, so the plan never wobbles', () => {
+      expect(
+        simplifyDebts([
+          { userId: alice, netMinor: -1000 },
+          { userId: bob, netMinor: 500 },
+          { userId: carol, netMinor: 500 },
+        ]),
+      ).toEqual([
+        { fromUserId: alice, toUserId: bob, amountMinor: 500 },
+        { fromUserId: alice, toUserId: carol, amountMinor: 500 },
+      ]);
+    });
+
     it('leaves a member who is already square out of the plan entirely', () => {
       const transfers = simplifyDebts([
         { userId: alice, netMinor: 1500 },
