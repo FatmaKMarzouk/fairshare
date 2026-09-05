@@ -1,0 +1,248 @@
+/*
+ * A small design system, defined once as custom properties so that components
+ * carry layout rules rather than colour and spacing decisions.
+ */
+
+:root {
+  color-scheme: light dark;
+
+  --bg: #f6f6f4;
+  --surface: #ffffff;
+  --surface-sunken: #f0f0ed;
+  --border: #e2e2dd;
+  --border-strong: #cfcfc8;
+
+  --text: #1c1c1a;
+  --text-muted: #6b6b64;
+  --text-faint: #93938b;
+
+  --accent: #2f5d50;
+  --accent-hover: #24483e;
+  --accent-contrast: #ffffff;
+  --accent-soft: #e6efec;
+
+  --positive: #1f6f4a;
+  --positive-soft: #e4f2ea;
+  --negative: #9b3025;
+  --negative-soft: #f8e7e5;
+
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow: 0 1px 2px rgb(28 28 26 / 6%), 0 4px 12px rgb(28 28 26 / 4%);
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
+    sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #16181a;
+    --surface: #1f2225;
+    --surface-sunken: #191c1e;
+    --border: #2d3134;
+    --border-strong: #3d4245;
+
+    --text: #e9eaea;
+    --text-muted: #a2a7a9;
+    --text-faint: #7c8184;
+
+    --accent: #6bbfa5;
+    --accent-hover: #85cfb7;
+    --accent-contrast: #10201b;
+    --accent-soft: #22322d;
+
+    --positive: #6fc79a;
+    --positive-soft: #1e3029;
+    --negative: #e0796c;
+    --negative-soft: #33211f;
+
+    --shadow: 0 1px 2px rgb(0 0 0 / 30%), 0 4px 12px rgb(0 0 0 / 20%);
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  line-height: 1.25;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+h1 {
+  font-size: 1.6rem;
+}
+h2 {
+  font-size: 1.15rem;
+}
+h3 {
+  font-size: 0.95rem;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Forms */
+
+label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: var(--space-1);
+}
+
+input,
+select {
+  width: 100%;
+  padding: 9px 11px;
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+input::placeholder {
+  color: var(--text-faint);
+}
+
+button {
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 9px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  cursor: pointer;
+  transition: background 0.15s ease, opacity 0.15s ease;
+}
+
+button:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+button.secondary {
+  background: transparent;
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+
+button.secondary:hover:not(:disabled) {
+  background: var(--surface-sunken);
+}
+
+button.quiet {
+  background: transparent;
+  border-color: transparent;
+  color: var(--text-muted);
+  padding: 4px 8px;
+}
+
+button.quiet:hover:not(:disabled) {
+  background: var(--surface-sunken);
+  color: var(--text);
+}
+
+/* Building blocks */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.muted {
+  color: var(--text-muted);
+}
+
+.amount {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.9rem;
+}
+
+.error {
+  padding: 9px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--negative-soft);
+  color: var(--negative);
+  font-size: 0.85rem;
+}
+
+.empty {
+  padding: var(--space-6) var(--space-4);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
