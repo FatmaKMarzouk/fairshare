@@ -47,7 +47,12 @@ const MODES: ModeOption[] = [
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <form class="form" (ngSubmit)="submit($event)">
+    <!--
+      The native submit event, not ngSubmit: this component keeps its state in
+      signals and pulls in no forms module, so ngSubmit would bind to nothing
+      and the browser would submit the form itself.
+    -->
+    <form class="form" (submit)="submit($event)">
       <div class="line">
         <div class="grow">
           <label for="expense-description">Description</label>

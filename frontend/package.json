@@ -10,25 +10,24 @@
   "scripts": {
     "build": "ng build",
     "start": "ng serve",
-    "watch": "ng build --watch --configuration development",
-    "lint": "ng lint"
+    "watch": "ng build --watch --configuration development"
   },
+  "//": "Angular packages are pinned to one exact version rather than a caret range. From 18.2.10 onwards @angular/compiler-cli requires chokidar 4 while @angular-devkit/core still requires chokidar 3, which leaves npm unable to produce a lock file that `npm ci` will accept. Pinning the set to a version line whose transitive dependencies agree fixes it properly, without an override that would force one of them onto a major version it was not built against.",
   "dependencies": {
-    "@angular/common": "^18.2.0",
-    "@angular/compiler": "^18.2.0",
-    "@angular/core": "^18.2.0",
-    "@angular/forms": "^18.2.0",
-    "@angular/platform-browser": "^18.2.0",
-    "@angular/platform-browser-dynamic": "^18.2.0",
-    "@angular/router": "^18.2.0",
+    "@angular/common": "18.2.5",
+    "@angular/compiler": "18.2.5",
+    "@angular/core": "18.2.5",
+    "@angular/forms": "18.2.5",
+    "@angular/platform-browser": "18.2.5",
+    "@angular/router": "18.2.5",
     "rxjs": "~7.8.1",
     "tslib": "^2.6.3",
     "zone.js": "~0.14.10"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^18.2.0",
-    "@angular/cli": "^18.2.0",
-    "@angular/compiler-cli": "^18.2.0",
+    "@angular-devkit/build-angular": "18.2.5",
+    "@angular/cli": "18.2.5",
+    "@angular/compiler-cli": "18.2.5",
     "typescript": "~5.5.4"
   }
 }

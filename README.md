@@ -27,6 +27,13 @@ To stop and wipe the database volume:
 docker compose down -v
 ```
 
+If either port is already busy on your machine, override it rather than editing
+the compose file:
+
+```bash
+API_PORT=3100 WEB_PORT=4300 docker compose up --build
+```
+
 ## What it does
 
 You and three friends share a flat. Over a month, one of you buys groceries, another

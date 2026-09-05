@@ -34,5 +34,15 @@ services:
       mongo:
         condition: service_healthy
 
+  web:
+    build:
+      context: ./frontend
+    restart: unless-stopped
+    ports:
+      - '${WEB_PORT:-4200}:80'
+    depends_on:
+      api:
+        condition: service_healthy
+
 volumes:
   mongo-data:

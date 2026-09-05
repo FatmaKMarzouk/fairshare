@@ -1,41 +1,40 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, of, tap } from 'rxjs';
 
 import { ApiService } from './api.service';
 import { AuthResult, User } from './models';
+import { TokenStore } from './token-store';
 
-const TOKEN_KEY = 'fairshare.token';
-
-/**
- * Holds the session.
- *
- * The token lives in localStorage so that a reload does not sign the user out.
- * That does mean a cross-site scripting bug could read it — the trade is made
- * deliberately, and the alternative worth building here would be a httpOnly
- * refresh cookie rather than a different browser storage key.
- */
+/** Owns the session: who is signed in, and how that starts and ends. */
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly api = inject(ApiService);
   private readonly router = inject(Router);
+  private readonly tokens = inject(TokenStore);
 
   private readonly currentUser = signal<User | null>(null);
-  private readonly token = signal<string | null>(readToken());
 
   readonly user = this.currentUser.asReadonly();
-  readonly isSignedIn = computed(() => this.token() !== null);
+  readonly isSignedIn = computed(() => this.tokens.token() !== null);
 
   constructor() {
-    // A token from a previous visit proves nothing on its own, so the identity
-    // behind it is confirmed with the server before it is shown anywhere.
-    if (this.token()) {
-      this.refresh();
-    }
-  }
+    // The interceptor can clear the token on a rejected request. Whoever it
+    // belonged to goes with it.
+    effect(
+      () => {
+        if (this.tokens.token() === null) {
+          this.currentUser.set(null);
+        }
+      },
+      { allowSignalWrites: true },
+    );
 
-  currentToken(): string | null {
-    return this.token();
+    // A token left over from a previous visit proves nothing on its own, so
+    // the identity behind it is confirmed with the server before it is shown.
+    if (this.tokens.token()) {
+      this.restore();
+    }
   }
 
   register(name: string, email: string, password: string) {
@@ -47,31 +46,22 @@ export class AuthService {
   }
 
   logout(): void {
-    this.token.set(null);
+    this.tokens.clear();
     this.currentUser.set(null);
-    localStorage.removeItem(TOKEN_KEY);
     void this.router.navigate(['/login']);
   }
 
-  /** Called by the interceptor when the server rejects the token. */
-  sessionExpired(): void {
-    this.token.set(null);
-    this.currentUser.set(null);
-    localStorage.removeItem(TOKEN_KEY);
-  }
-
   private accept(result: AuthResult): void {
-    this.token.set(result.token);
+    this.tokens.set(result.token);
     this.currentUser.set(result.user);
-    localStorage.setItem(TOKEN_KEY, result.token);
   }
 
-  private refresh(): void {
+  private restore(): void {
     this.api
       .me()
       .pipe(
         catchError(() => {
-          this.sessionExpired();
+          this.tokens.clear();
           return of(null);
         }),
       )
@@ -80,14 +70,5 @@ export class AuthService {
           this.currentUser.set(result.user);
         }
       });
-  }
-}
-
-function readToken(): string | null {
-  try {
-    return localStorage.getItem(TOKEN_KEY);
-  } catch {
-    // Private browsing modes can make storage throw rather than return null.
-    return null;
   }
 }
