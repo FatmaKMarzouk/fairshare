@@ -83,20 +83,25 @@ rationalisation written after the fact.
 
 Each row is one commit, pushed as it lands.
 
-| # | Subtask | Commit | State after |
-|---|---|---|---|
-| 01 | Repo foundation — README, this plan, licence, editor + git config | `chore: project foundation` | — |
-| 02 | Backend toolchain — TypeScript, ESLint, Jest, package manifest | `chore(backend): toolchain` | — |
-| 03 | **Contract** — domain types + unit tests for both engines | `test(backend): domain contract` | 🔴 red |
-| 04 | **Contract** — REST API integration tests | `test(backend): api contract` | 🔴 red |
-| 05 | **Contract** — Playwright end-to-end specs | `test(e2e): frontend contract` | 🔴 red |
-| 06 | Domain engines implemented | `feat(backend): split and settlement engines` | 🟢 03 green |
-| 07 | Mongoose models, auth, services, routes | `feat(backend): rest api` | 🟢 04 green |
-| 08 | Backend container + Mongo compose service | `build: dockerize backend` | — |
-| 09 | Angular application | `feat(frontend): angular client` | — |
-| 10 | Frontend container, nginx, full compose stack | `build: dockerize frontend` | 🟢 05 green |
-| 11 | CI/CD — lint, unit, integration, e2e, image build | `ci: github actions pipeline` | — |
-| 12 | Full validation run + documented results | `docs: validation report` | ✅ all green |
+| # | Subtask | Commit | State after | Done |
+|---|---|---|---|---|
+| 01 | Repo foundation — README, this plan, licence, editor + git config | `chore: project foundation` | — | ✅ |
+| 02 | Backend toolchain — TypeScript, ESLint, Jest, package manifest | `chore(backend): toolchain` | — | ✅ |
+| 03 | **Contract** — domain types + unit tests for both engines | `test(backend): domain contract` | 🔴 70 failing | ✅ |
+| 04 | **Contract** — REST API integration tests | `test(backend): api contract` | 🔴 70 failing | ✅ |
+| 05 | **Contract** — Playwright end-to-end specs | `test(e2e): frontend contract` | 🔴 26 failing | ✅ |
+| 06 | Domain engines implemented | `feat(backend): split and settlement engines` | 🟢 108 passing | ✅ |
+| 07 | Mongoose models, auth, services, routes | `feat(backend): rest api` | 🟢 178 passing | ✅ |
+| 08 | Backend container + Mongo compose service | `build: dockerize backend` | — | ✅ |
+| 09 | Angular application | `feat(frontend): angular client` | — | ✅ |
+| 10 | Frontend container, nginx, full compose stack | `build: dockerize frontend` | 🟢 26 passing | ✅ |
+| 11 | CI/CD — lint, unit, integration, e2e, image build | `ci: github actions pipeline` | — | ⬜ |
+| 12 | Full validation run + documented results | `docs: validation report` | ✅ 204 passing | ✅ |
+
+Subtask 03 landed with 70 failing rather than the 105 it should have: one test
+file had a type error and never compiled, so a third of the contract was not
+running. Found and fixed in subtask 06, and written up in
+[the validation report](docs/VALIDATION.md).
 
 ## 5. API contract
 

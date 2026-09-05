@@ -112,6 +112,11 @@ export class GroupPage {
     }
 
     await this.page.getByTestId('expense-submit').click();
+
+    // Return only once the expense is actually recorded. Without this a test
+    // that adds two expenses can begin the second while the first is still in
+    // flight, and any assertion that follows races the reload.
+    await expect(this.expenseNamed(options.description)).toBeVisible();
   }
 
   expenseRows(): Locator {
