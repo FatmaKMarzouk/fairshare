@@ -8,3 +8,8 @@
 
 // Keep test output deterministic regardless of the machine's locale.
 process.env.TZ = 'UTC';
+
+process.env.NODE_ENV = 'test';
+
+// A fixed signing key, so a token minted in one test is verifiable in the next.
+process.env.JWT_SECRET = 'test-signing-key-not-used-anywhere-real';
