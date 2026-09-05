@@ -1,0 +1,38 @@
+services:
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      # The API waits on this rather than on the container merely existing,
+      # because mongod accepts connections some seconds after the process starts.
+      test: ['CMD', 'mongosh', '--quiet', '--eval', "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  api:
+    build:
+      context: ./backend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      MONGO_URL: mongodb://mongo:27017/fairshare
+      # Development default. Anything deployed anywhere real must override this
+      # with a long random value; the API refuses to start without a value.
+      JWT_SECRET: ${JWT_SECRET:-local-development-signing-key-change-me}
+      JWT_EXPIRES_IN: 7d
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:4200}
+    ports:
+      # Host port is overridable, because 3000 is a popular port and a machine
+      # already running something else there should not need a file edit.
+      - '${API_PORT:-3000}:3000'
+    depends_on:
+      mongo:
+        condition: service_healthy
+
+volumes:
+  mongo-data:
