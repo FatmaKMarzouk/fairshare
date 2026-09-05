@@ -1,0 +1,14 @@
+node_modules/
+dist/
+build/
+coverage/
+.angular/
+*.log
+.env
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+playwright-report/
+test-results/
+blob-report/
