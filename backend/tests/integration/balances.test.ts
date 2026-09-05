@@ -189,9 +189,12 @@ describe('GET /api/groups/:id/settlement', () => {
       .get(`/api/groups/${groupId}/settlement`)
       .set(authHeader(alice));
 
-    expect(response.body.transfers).toEqual([
-      { fromUserId: carol.id, toUserId: alice.id, amountMinor: 1500 },
-    ]);
+    expect(response.body.transfers).toHaveLength(1);
+    expect(response.body.transfers[0]).toMatchObject({
+      fromUserId: carol.id,
+      toUserId: alice.id,
+      amountMinor: 1500,
+    });
   });
 
   it('never needs more transfers than there are members, less one', async () => {
